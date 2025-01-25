@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/_navbar.html' %}
+<div class="container mt-5">
+    <div class="card shadow-sm p-4 border">
+        <div>
+                    <button id="backButton" class="btn btn-secondary btn-sm mb-2" role="button" aria-pressed="true">< Back</button>
+                </div>
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="fw-bold text-primary">{{ skill.title }}</h2>
+                <hr>
+                <p><strong class="text-muted">Subcategory:</strong> {{ skill.get_full_category }}</p>
+                <p><strong class="text-muted">Description:</strong> {{ skill.description }}</p>
+                <p><strong class="text-muted">Start Time:</strong> {{ skill.availability_start }}</p>
+                <p><strong class="text-muted">End Time:</strong> {{ skill.availability_end }}</p>
+                <p><strong class="text-muted">Created By:</strong> {{ skill.user.username }}</p>
+                <p><strong class="text-muted">Created At:</strong> {{ skill.created_at|timesince }} ago</p>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    {% if skill.image %}
+                    <img src="{{ skill.image.url }}" alt="{{ skill.title }}" class="img-fluid rounded shadow-sm">
+                    {% else %}
+                    <img src="{% static 'img/Skill.jpg' %}" alt="No image available" class="img-fluid rounded shadow-sm">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("backButton").addEventListener("click", function (event) {
+        event.preventDefault();
+        window.history.back();
+    });
+</script>
+{% endblock %}

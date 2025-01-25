@@ -1,0 +1,6 @@
+Django==4.1.1
+django-widget-tweaks==1.4.12
+docker==6.0.0
+docker-compose==1.29.2
+psycopg2==2.9.3
+psycopg2-binary==2.9.3

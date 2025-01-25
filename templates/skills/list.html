@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% include 'partials/_navbar.html' %}
+<div class="container mt-5">
+    <h2>Skill Listings</h2>
+
+    <!-- Search Bar -->
+    <form method="get" class="d-flex mb-4">
+        <input
+            type="text"
+            name="q"    
+            class="form-control me-2"
+            placeholder="Search skills by title, description, or subcategory..."
+            value="{{ query }}"
+        />
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- Skill Listings -->
+    <div class="row">
+        {% if page_obj %}
+            {% for skill in page_obj %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-img-container">
+                        {% if skill.image %}
+                        <img src="{{ skill.image.url }}" class="card-img-top" alt="{{ skill.title }}">
+                        {% else %}
+                        <img src="{% static 'img/skill.jpg' %}" class="card-img-top" alt="{{ skill.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ skill.title }}</h5>
+                        <p class="card-text mb-0">{{ skill.description|truncatewords:20 }}</p>
+                        <p class="card-text mb-0"><small class="text-muted">{{ skill.get_full_category }}</small></p>
+                        <p class="card-text mb-0"><strong>Rating:</strong> {{ skill.average_rating }}</p>
+                        <p class="card-text mb-0"><strong>Start Time:</strong> {{ skill.availability_start }}</p>
+                        <p class="card-text mb-0"><strong>End Time:</strong> {{ skill.availability_end }}</p>
+                        <p class="card-text mb-0"><strong>Created By:</strong> {{ skill.user.username }}</p>
+                        <p class="card-text mb-0"><strong>Created At:</strong> {{ skill.created_at|timesince }} ago</p>
+                        {% if request.user == skill.user %}
+                        <div class="badge badge-secondary">You</div>
+                        {% endif %}
+                        <div class="mt-2">
+                            <a href="{% url 'skill_reviews' skill.id %}" class="btn btn-primary btn-sm">Reviews</a>
+                            <a href="{% url 'send_message' skill.id %}" class="btn btn-secondary btn-sm">Message</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center w-100">No skill listings found matching your search.</p>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% include 'partials/_pagination.html' %} 
+</div>
+{% endblock %}
