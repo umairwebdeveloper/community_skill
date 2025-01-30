@@ -66,6 +66,7 @@ class SubCategory(models.Model):
 
 
 class SkillListing(models.Model):
+    
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -193,7 +194,9 @@ class Message(models.Model):
     content = models.TextField(verbose_name="Message Content")
     is_read = models.BooleanField(default=False, verbose_name="Read Status")
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Sent At")
-
+    parent = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.CASCADE, related_name="replies"
+    )
     class Meta:
         ordering = ["-timestamp"]
         verbose_name = "Message"
@@ -201,3 +204,50 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Message from {self.sender} to {self.receiver} about {self.skill.title}"
+
+
+class SkillRequest(models.Model):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+
+    STATUS_CHOICES = [
+        (PENDING, "Pending"),
+        (APPROVED, "Approved"),
+        (REJECTED, "Rejected"),
+    ]
+
+    sender = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="sent_requests",
+        verbose_name="Requester",
+    )
+    skill = models.ForeignKey(
+        "SkillListing",
+        on_delete=models.CASCADE,
+        related_name="requests",
+        verbose_name="Requested Skill",
+    )
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default=PENDING,
+        verbose_name="Request Status",
+    )
+    message = models.TextField(
+        verbose_name="Request Message",
+        help_text="Write a short message explaining why you are interested in this skill.",
+        null=True,
+        blank=True,
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Requested At")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Last Updated")
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Skill Request"
+        verbose_name_plural = "Skill Requests"
+
+    def __str__(self):
+        return f"Request by {self.sender.username} for {self.skill.title} ({self.get_status_display()})"

@@ -1,25 +1,40 @@
-{% extends "base.html" %} {% block content %} {% include 'partials/_navbar.html' %}
+{% extends "base.html" %}
+{% block content %}
+{% include 'partials/_navbar.html' %}
 
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card p-3">
-                <h2>Send Messages</h2>
+                <h2>Sent Messages</h2>
                 {% if page_obj %}
                 <ul class="list-group mb-4">
                     {% for message in page_obj %}
                     <li class="list-group-item">
-                        <strong>From:</strong> {{ message.receiver.username }}<br />
+                        <strong>To:</strong> {{ message.receiver.username }}<br />
                         <strong>Skill:</strong>
                         <a href="{% url 'skill_detail' message.skill.id %}">{{ message.skill.title }}</a><br />
                         <strong>Message:</strong> {{ message.content }}<br />
-                        <small class="text-muted"
-                            >Sent: {{ message.timestamp }}</small
-                        >
+                        <small class="text-muted">Sent: {{ message.timestamp }}</small>
+
+                        {% if message.replies.all %}
+                        <div class="mt-3">
+                            <strong>Replies:</strong>
+                            <ul class="list-group mt-2">
+                                {% for reply in message.replies.all %}
+                                <li class="list-group-item">
+                                    <strong>From:</strong> {{ reply.sender.username }}<br />
+                                    <strong>Message:</strong> {{ reply.content }}<br />
+                                    <small class="text-muted">Sent: {{ reply.timestamp }}</small>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
-                {% include 'partials/_pagination.html' %} 
+                {% include 'partials/_pagination.html' %}
                 {% else %}
                 <p>No messages yet.</p>
                 {% endif %}
@@ -27,4 +42,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

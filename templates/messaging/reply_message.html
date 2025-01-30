@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'partials/_navbar.html' %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-3">
+                <h2>Reply to Message</h2>
+                <p><strong>From:</strong> {{ parent_message.sender.username }}</p>
+                <p><strong>Skill:</strong> {{ parent_message.skill.title }}</p>
+                <p><strong>Original Message:</strong> {{ parent_message.content }}</p>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.content.label_tag }}
+                        {{ form.content }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Reply</button>
+                    <a href="{% url 'inbox' %}" class="btn btn-secondary">Back to Inbox</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

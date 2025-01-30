@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'partials/_navbar.html' %}
+
+<div class="container my-5">
+    <h2>Sent Skill Requests</h2>
+
+    {% if skill_requests %}
+    <ul class="list-group">
+        {% for req in skill_requests %}
+        <li class="list-group-item">
+            <strong>Skill:</strong> <a href="{% url 'skill_detail' req.skill.id %}">{{ req.skill.title }}</a><br />
+            <strong>Status:</strong>
+            <span class="badge {% if req.status == 'pending' %}bg-warning{% elif req.status == 'approved' %}bg-success{% else %}bg-danger{% endif %}">
+                {{ req.get_status_display }}
+            </span>
+            <br />
+            <small class="text-muted">Requested at: {{ req.created_at }}</small>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No sent requests found.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

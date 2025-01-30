@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import SkillListingForm, RatingAndReviewForm, UserProfileForm, MessageForm
+from .forms import MessageReplyForm, SkillListingForm, RatingAndReviewForm, SkillRequestForm, UserProfileForm, MessageForm
 from django.shortcuts import get_object_or_404
-from .models import SkillListing, UserProfile, Message
+from .models import SkillListing, SkillRequest, UserProfile, Message
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -55,10 +55,22 @@ def skill_listing_list(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
+    skill_requests = {}
+    if request.user.is_authenticated:
+        skill_requests = {
+            req.skill_id: req.status
+            for req in SkillRequest.objects.filter(sender=request.user)
+        }
+
     return render(
         request,
         "skills/list.html",
-        {"page_obj": page_obj, "query": query, "user_list": False},
+        {
+            "page_obj": page_obj,
+            "query": query,
+            "user_list": False,
+            "skill_requests": skill_requests,
+        },
     )
 
 
@@ -140,9 +152,7 @@ def update_profile(request):
 
 @login_required(login_url="/login")
 def inbox(request):
-    messages = Message.objects.filter(receiver=request.user).select_related(
-        "skill", "sender"
-    )
+    messages = Message.objects.filter(receiver=request.user, parent__isnull=True).select_related("skill", "sender")
     paginator = Paginator(messages, 10)  # Show 9 skill listings per page
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -151,9 +161,8 @@ def inbox(request):
 
 @login_required(login_url="/login")
 def send_messages(request):
-    messages = Message.objects.filter(sender=request.user).select_related(
-        "skill", "sender"
-    )
+    messages = Message.objects.filter(sender=request.user, parent__isnull=True).select_related("skill", "receiver")
+
     paginator = Paginator(messages, 10)  # Show 9 skill listings per page
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -185,4 +194,100 @@ def send_message(request, skill_id):
         request,
         "messaging/send_message.html",
         {"form": form, "skill": skill, "messages": messages},
+    )
+
+
+@login_required(login_url="/login")
+def reply_message(request, message_id):
+    parent_message = get_object_or_404(Message, id=message_id, receiver=request.user)
+
+    if request.method == "POST":
+        form = MessageReplyForm(request.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.sender = request.user
+            reply.receiver = parent_message.sender  # Replying to the original sender
+            reply.skill = parent_message.skill
+            reply.parent = parent_message  # Link reply to the original message
+            reply.save()
+            return redirect("inbox")  # Redirect back to the inbox
+
+    else:
+        form = MessageReplyForm()
+
+    return render(
+        request,
+        "messaging/reply_message.html",
+        {"form": form, "parent_message": parent_message},
+    )
+
+
+@login_required(login_url="/login")
+def send_skill_request(request, skill_id):
+    skill = get_object_or_404(SkillListing, id=skill_id)
+
+    # Prevent duplicate requests
+    existing_request = SkillRequest.objects.filter(
+        sender=request.user, skill=skill
+    ).first()
+    if existing_request:
+        messages.warning(request, "You have already sent a request for this skill.")
+        return redirect("skill_listing_list")
+
+    if request.method == "POST":
+        form = SkillRequestForm(request.POST)
+        if form.is_valid():
+            skill_request = form.save(commit=False)
+            skill_request.sender = request.user
+            skill_request.skill = skill
+            skill_request.save()
+            messages.success(request, "Your request has been sent successfully!")
+            return redirect("skill_listing_list")
+    else:
+        form = SkillRequestForm()
+
+    return render(request, "skills/send_request.html", {"form": form, "skill": skill})
+
+
+@login_required(login_url="/login")
+def manage_skill_requests(request):
+    skill_requests = SkillRequest.objects.filter(skill__user=request.user)
+    return render(
+        request, "skills/manage_requests.html", {"skill_requests": skill_requests}
+    )
+
+
+@login_required(login_url="/login")
+def approve_skill_request(request, request_id):
+    skill_request = get_object_or_404(
+        SkillRequest, id=request_id, skill__user=request.user
+    )
+    skill_request.status = SkillRequest.APPROVED
+    skill_request.save()
+    messages.success(request, "Skill request has been approved.")
+    return redirect("manage_skill_requests")
+
+
+@login_required(login_url="/login")
+def reject_skill_request(request, request_id):
+    skill_request = get_object_or_404(
+        SkillRequest, id=request_id, skill__user=request.user
+    )
+    skill_request.status = SkillRequest.REJECTED
+    skill_request.save()
+    messages.error(request, "Skill request has been rejected.")
+    return redirect("manage_skill_requests")
+
+
+@login_required(login_url="/login")
+def sent_requests(request):
+    """View to display all sent skill requests by the user."""
+    skill_requests = SkillRequest.objects.filter(sender=request.user).select_related(
+        "skill"
+    )
+
+    return render(
+        request,
+        "skills/sent_requests.html",
+        {"skill_requests": skill_requests},
     )

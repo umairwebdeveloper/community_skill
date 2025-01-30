@@ -1,5 +1,5 @@
 from django import forms
-from .models import SkillListing, RatingAndReview, UserProfile, Message
+from .models import SkillListing, RatingAndReview, SkillRequest, UserProfile, Message
 from django.contrib.auth.models import User
 
 
@@ -141,5 +141,22 @@ class MessageForm(forms.ModelForm):
                     "rows": 3,
                     "placeholder": "Write your message here...",
                 }
+            ),
+        }
+
+
+class MessageReplyForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ["content"]
+
+
+class SkillRequestForm(forms.ModelForm):
+    class Meta:
+        model = SkillRequest
+        fields = ["message"]
+        widgets = {
+            "message": forms.Textarea(
+                attrs={"rows": 3, "placeholder": "Why do you want to learn this skill?"}
             ),
         }

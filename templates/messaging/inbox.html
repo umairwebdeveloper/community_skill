@@ -13,13 +13,24 @@
                         <strong>Skill:</strong>
                         <a href="{% url 'skill_detail' message.skill.id %}">{{ message.skill.title }}</a><br />
                         <strong>Message:</strong> {{ message.content }}<br />
-                        <small class="text-muted"
-                            >Sent: {{ message.timestamp }}</small
-                        >
+                        <small class="text-muted">Sent: {{ message.timestamp }}</small><br />
+                        <a href="{% url 'reply_message' message.id %}" class="btn btn-sm btn-primary mt-2">Reply</a>
+
+                        {% if message.replies.all %}
+                        <ul class="mt-2">
+                            {% for reply in message.replies.all %}
+                            <li class="list-group-item">
+                                <strong>Reply from:</strong> {{ reply.sender.username }}<br />
+                                <strong>Message:</strong> {{ reply.content }}<br />
+                                <small class="text-muted">Sent: {{ reply.timestamp }}</small>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
-                {% include 'partials/_pagination.html' %} 
+                {% include 'partials/_pagination.html' %}
                 {% else %}
                 <p>No messages yet.</p>
                 {% endif %}
@@ -27,4 +38,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

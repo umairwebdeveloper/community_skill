@@ -5,17 +5,21 @@
         <div class="row align-items-center">
             <div class="col-md-6 text-md-start">
                 {% include 'partials/_alert.html' %}
-                <h1 class="display-4 fw-bold">Welcome to SkillSwap</h1>
+                <h1 class="display-4 fw-bold">Welcome to SkillSharing</h1>
                 <p class="lead">
                     Discover, share, and learn skills with a vibrant community
                     of passionate individuals. Whether you're here to teach or
-                    to grow, SkillSwap is the place to be.
+                    to grow, SkillSharing is the place to be.
                 </p>
                 <div class="mt-4">
-                    <a href="{% url 'skill_listing_list' %}" class="btn btn-primary btn-lg me-3"
+                    <a
+                        href="{% url 'skill_listing_list' %}"
+                        class="btn btn-primary btn-lg me-3"
                         >Explore Skills</a
                     >
-                    <a href="{% url 'create_skill_listing' %}" class="btn btn-outline-secondary btn-lg"
+                    <a
+                        href="{% url 'create_skill_listing' %}"
+                        class="btn btn-outline-secondary btn-lg"
                         >Create Skill</a
                     >
                 </div>

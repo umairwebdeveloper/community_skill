@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'partials/_navbar.html' %}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-3">
+                <div class="mb-3">
+                {% include 'partials/_alert.html' %}
+                </div>
+                <h2>Manage Skill Requests</h2>
+                {% if skill_requests %}
+                <ul class="list-group mb-4">
+                    {% for req in skill_requests %}
+                    <li class="list-group-item">
+                        <strong>From:</strong> {{ req.sender.username }}<br />
+                        <strong>Skill:</strong> {{ req.skill.title }}<br />
+                        <strong>Message:</strong> {{ req.message|default:"No message provided." }}<br />
+                        <strong>Status:</strong> <span class="badge {% if req.status == 'pending' %}bg-warning{% elif req.status == 'approved' %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ req.get_status_display }}</span><br />
+                        <small class="text-muted">Requested at: {{ req.created_at }}</small><br />
+
+                        {% if req.status == "pending" %}
+                        <a href="{% url 'approve_skill_request' req.id %}" class="btn btn-sm btn-success mt-2">Approve</a>
+                        <a href="{% url 'reject_skill_request' req.id %}" class="btn btn-sm btn-danger mt-2">Reject</a>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No requests yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
