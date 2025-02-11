@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "0z^!14-*)rxw#b#c7^#axlgw#0n!k^fxxasj_3u%$b$-bx(8u1"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -78,23 +78,23 @@ WSGI_APPLICATION = "setup.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "Shah123$default",
-        "USER": "Shah123",
-        "PASSWORD": "Admin(123)",
-        "HOST": "Shah123.mysql.pythonanywhere-services.com",
-        "PORT": "3306",
-    }
-}
-
 # DATABASES = {
 #     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "Shah123$default",
+#         "USER": "Shah123",
+#         "PASSWORD": "Admin(123)",
+#         "HOST": "Shah123.mysql.pythonanywhere-services.com",
+#         "PORT": "3306",
 #     }
 # }
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 
 # Password validation
