@@ -6,6 +6,9 @@ from django.contrib.auth.forms import PasswordChangeForm
 def home(request):
     return render(request, 'home/home.html')
 
+def about(request):
+    return render(request, 'home/about.html')
+
 
 @login_required(login_url='/login')
 def change_password(request):

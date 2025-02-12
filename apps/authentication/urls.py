@@ -35,5 +35,6 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path("", home, name="home"),
+    path("about/", about, name="about"),
     path("change_password/", change_password, name="change_password"),
 ]
