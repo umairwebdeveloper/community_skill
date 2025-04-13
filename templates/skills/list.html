@@ -15,7 +15,7 @@
             type="text"
             name="q"    
             class="form-control me-2"
-            placeholder="Search skills by title, description, or subcategory..."
+            placeholder="Search skills by title or description"
             value="{{ query }}"
         />
         <button type="submit" class="btn btn-primary">Search</button>
@@ -47,8 +47,8 @@
                         <div class="badge badge-secondary">You</div>
                         {% endif %}
                         <div class="mt-2">
-                            <a href="{% url 'skill_reviews' skill.id %}" class="btn btn-primary btn-sm">Reviews</a>
-                            <a href="{% url 'send_message' skill.id %}" class="btn btn-secondary btn-sm">Message</a>
+                            <a href="{% url 'skill_reviews' skill.id %}" data-url="{% url 'skill_reviews' skill.id %}" class="btn btn-primary btn-sm">Reviews</a>
+                            <a href="{% url 'send_message' skill.id %}" data-url="{% url 'send_message' skill.id %}" class="btn btn-secondary btn-sm">Message</a>
                             {% if request.user != skill.user %}
                                 {% if skill.id in skill_requests %}
                                     {% if skill_requests|dict_get:skill.id == "pending" %}
