@@ -7,39 +7,60 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto">
+                <!-- Home -->
                 <li class="nav-item">
-                    <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Home</a>
+                    <a class="nav-link {% if request.path == '/' %}active text-primary{% endif %}" href="/">Home</a>
                 </li>
+
+                <!-- All Skills (always visible) -->
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'skill_listing_list' %}active{% endif %}" href="{% url 'skill_listing_list' %}">All Skills</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'skill_listing_list' %}active text-primary{% endif %}" href="{% url 'skill_listing_list' %}">All Skills</a>
                 </li>
 
                 {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'user_skill_listing_list' %}active{% endif %}" href="{% url 'user_skill_listing_list' %}">My Skills</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'create_skill_listing' %}active{% endif %}" href="{% url 'create_skill_listing' %}">Skill Create</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'inbox' %}active{% endif %}" href="{% url 'inbox' %}">Inbox</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'send_messages' %}active{% endif %}" href="{% url 'send_messages' %}">Send Messages</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'sent_requests' %}active{% endif %}" href="{% url 'sent_requests' %}">Skill Learning</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'manage_skill_requests' %}active{% endif %}" href="{% url 'manage_skill_requests' %}">Skill Requests</a>
+                <!-- Skills Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'user_skill_listing create_skill_listing' %}active text-primary{% endif %}" href="#" id="skillsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Skills </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="skillsDropdown">
+                        <li>
+                            <a class="dropdown-item {% if request.resolver_match.url_name == 'user_skill_listing' %}active{% endif %}" href="{% url 'user_skill_listing' %}">My Skills</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if request.resolver_match.url_name == 'create_skill_listing' %}active{% endif %}" href="{% url 'create_skill_listing' %}">Create Skill</a>
+                        </li>
+                    </ul>
                 </li>
 
+                <!-- Messages Dropdown -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Profile </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'inbox send_messages' %}active text-primary{% endif %}" href="#" id="messagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Messages </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="messagesDropdown">
+                        <li>
+                            <a class="dropdown-item {% if request.resolver_match.url_name == 'inbox' %}active{% endif %}" href="{% url 'inbox' %}">Inbox</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if request.resolver_match.url_name == 'send_messages' %}active{% endif %}" href="{% url 'send_messages' %}">Send Message</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Requests Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if request.resolver_match.url_name in 'sent_requests manage_skill_requests' %}active text-primary{% endif %}" href="#" id="requestsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Requests </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="requestsDropdown">
+                        <li>
+                            <a class="dropdown-item {% if request.resolver_match.url_name == 'sent_requests' %}active{% endif %}" href="{% url 'sent_requests' %}">Skill Learning</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item {% if request.resolver_match.url_name == 'manage_skill_requests' %}active{% endif %}" href="{% url 'manage_skill_requests' %}">Skill Requests</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Profile Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> Profile </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                         <li>
                             <a class="dropdown-item {% if request.resolver_match.url_name == 'update_profile' %}active{% endif %}" href="{% url 'update_profile' %}">Update Profile</a>
                         </li>
@@ -52,9 +73,11 @@
                         </li>
                     </ul>
                 </li>
+
                 {% else %}
+                <!-- Login Link for Guests -->
                 <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active text-primary{% endif %}" href="{% url 'login' %}">Login</a>
                 </li>
                 {% endif %}
             </ul>

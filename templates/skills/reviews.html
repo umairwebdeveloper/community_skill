@@ -1,78 +1,68 @@
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
-{% include 'partials/_navbar.html' %}
+{% extends "base.html" %} {% load static %} {% block content %} {% include 'partials/_navbar.html' %}
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card p-3">
                 {% include 'partials/_alert.html' %}
                 <div>
-                    <button id="backButton" class="btn btn-secondary btn-sm mb-2" role="button" aria-pressed="true">< Back</button>
+                    <button id="backButton" class="btn btn-outline-web-secondary btn-sm mb-2" role="button" aria-pressed="true">< Back</button>
                 </div>
 
-    <h2>Reviews for {{ skill.title }} {% if skill.user == request.user %}<span class="badge badge-secondary">You</span>{% endif %}</h2>
-    <p><strong>Category:</strong> {{ skill.get_full_category }}</p>
-    <p><strong>Description:</strong> {{ skill.description }}</p>
-    {% if skill.image %}
-    <img src="{{ skill.image.url }}" alt="{{ skill.title }}" class="img-fluid mb-3">
-    {% endif %}
+                <h2>Reviews for: {{ skill.title }} {% if skill.user == request.user %}<span class="badge badge-secondary">You</span>{% endif %}</h2>
+                <p><strong>Category:</strong> {{ skill.get_full_category }}</p>
+                <p><strong>Description:</strong> {{ skill.description }}</p>
+                {% if skill.image %}
+                <img src="{{ skill.image.url }}" alt="{{ skill.title }}" class="img-fluid mb-3" />
+                {% endif %}
 
-    <hr>
+                <hr />
 
-    <!-- Display Average Rating -->
-    <h4>Average Rating: {{ skill.average_rating|default:"No ratings yet" }}</h4>
-    <p>Total Reviews: {{ skill.total_reviews }}</p>
+                <!-- Display Average Rating -->
+                <h4>Average Rating: {{ skill.average_rating|default:"No ratings yet" }}</h4>
+                <p>Total Reviews: {{ skill.total_reviews }}</p>
 
-    <hr>
+                <hr />
 
-    <!-- Review Form -->
-    {% if not skill.user == request.user %}
-    <h4>Submit Your Review</h4>
-    {% if user.is_authenticated %}
-    <form method="post" class="mb-4">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <div class="mb-3">
-            {{ form.rating.label_tag }}
-            {{ form.rating }}
+                <!-- Review Form -->
+                {% if not skill.user == request.user %}
+                <h4>Submit Your Review</h4>
+                {% if user.is_authenticated %}
+                <form method="post" class="mb-4">
+                    {% csrf_token %} {{ form.non_field_errors }}
+                    <div class="mb-3">{{ form.rating.label_tag }} {{ form.rating }}</div>
+                    <div class="mb-3">{{ form.review.label_tag }} {{ form.review }}</div>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
+                {% else %}
+                <p class="text-muted">You must <a href="{% url 'login' %}">log in</a> to leave a review.</p>
+                {% endif %}
+
+                <hr />
+                {% endif %}
+                <!-- Reviews List -->
+                <h4>All Reviews</h4>
+                {% if reviews %}
+                <ul class="list-group">
+                    {% for review in reviews %}
+                    <li class="list-group-item">
+                        <strong>{{ review.user.username }}</strong> ({{ review.rating }}/5)
+                        <p>{{ review.review }}</p>
+                        <small class="text-muted">Reviewed on {{ review.created_at|date:"M d, Y" }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>No reviews yet. Be the first to review this skill!</p>
+                {% endif %}
+            </div>
         </div>
-        <div class="mb-3">
-            {{ form.review.label_tag }}
-            {{ form.review }}
-        </div>
-        <button type="submit" class="btn btn-primary">Submit Review</button>
-    </form>
-    {% else %}
-    <p class="text-muted">You must <a href="{% url 'login' %}">log in</a> to leave a review.</p>
-    {% endif %}
-
-    <hr>
-    {% endif %}
-    <!-- Reviews List -->
-    <h4>All Reviews</h4>
-    {% if reviews %}
-    <ul class="list-group">
-        {% for review in reviews %}
-        <li class="list-group-item">
-            <strong>{{ review.user.username }}</strong> ({{ review.rating }}/5)
-            <p>{{ review.review }}</p>
-            <small class="text-muted">Reviewed on {{ review.created_at|date:"M d, Y" }}</small>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>No reviews yet. Be the first to review this skill!</p>
-    {% endif %}
-</div>
-</div>
-</div>
+    </div>
 </div>
 
 <script>
     document.getElementById("backButton").addEventListener("click", function (event) {
-        event.preventDefault();
-        window.history.back();
-    });
+        event.preventDefault()
+        window.history.back()
+    })
 </script>
 {% endblock %}

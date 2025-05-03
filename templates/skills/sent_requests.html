@@ -11,7 +11,7 @@
         <li class="list-group-item">
             <strong>Skill:</strong> <a href="{% url 'skill_detail' req.skill.id %}">{{ req.skill.title }}</a><br />
             <strong>Status:</strong>
-            <span class="badge {% if req.status == 'pending' %}bg-warning{% elif req.status == 'approved' %}bg-success{% else %}bg-danger{% endif %}">
+            <span class="badge {% if req.status == 'pending' %}bg-web-secondary{% elif req.status == 'approved' %}bg-web-secondary{% else %}bg-web-secondary{% endif %}">
                 {{ req.get_status_display }}
             </span>
             <br />

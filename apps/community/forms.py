@@ -1,6 +1,7 @@
 from django import forms
 from .models import SkillListing, RatingAndReview, SkillRequest, UserProfile, Message
 from django.contrib.auth.models import User
+from datetime import time
 
 
 class UserProfileForm(forms.ModelForm):
@@ -87,10 +88,20 @@ class SkillListingForm(forms.ModelForm):
         ]
         widgets = {
             "availability_start": forms.TimeInput(
-                attrs={"type": "time", "class": "form-control"}
+                attrs={
+                    "type": "time",
+                    "class": "form-control",
+                    "min": "09:00",
+                    "max": "22:00",
+                }
             ),
             "availability_end": forms.TimeInput(
-                attrs={"type": "time", "class": "form-control"}
+                attrs={
+                    "type": "time",
+                    "class": "form-control",
+                    "min": "09:00",
+                    "max": "22:00",
+                }
             ),
             "title": forms.TextInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
@@ -99,22 +110,35 @@ class SkillListingForm(forms.ModelForm):
         }
 
     def clean(self):
-        cleaned_data = super().clean()
-        availability_start = cleaned_data.get("availability_start")
-        availability_end = cleaned_data.get("availability_end")
+        cleaned = super().clean()
+        start = cleaned.get("availability_start")
+        end = cleaned.get("availability_end")
 
-        if (
-            availability_start
-            and availability_end
-            and availability_end <= availability_start
-        ):
-            raise forms.ValidationError(
-                {
-                    "availability_end": "End availability time must be greater than start availability time."
-                }
-            )
+        # only validate if both are present
+        if start and end:
+            # 1) end must be after start
+            if end <= start:
+                self.add_error(
+                    "availability_end",
+                    "End time must be later than start time.",
+                )
 
-        return cleaned_data
+            # 2) enforce the 09:00–22:00 window
+            window_start = time(9, 0)
+            window_end = time(22, 0)
+
+            if start < window_start or start > window_end:
+                self.add_error(
+                    "availability_start",
+                    "Start time must be between 09:00 and 22:00.",
+                )
+            if end < window_start or end > window_end:
+                self.add_error(
+                    "availability_end",
+                    "End time must be between 09:00 and 22:00.",
+                )
+
+        return cleaned
 
 
 class RatingAndReviewForm(forms.ModelForm):

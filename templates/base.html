@@ -11,7 +11,7 @@
         <title>SkillSharing - Share and Learn Skills in Your Community</title>
 
         <!-- Bootstrap CSS -->
-        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" />
         <!-- Bootstrap Icons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" integrity="sha512-dPXYcDub/aeb08c63jRq/k6GaKccl256JQy/AnOq7CAnEZ9FzSL9wSbcZkMp4R26vBsMLFYH4kQ67/bbV8XaCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <!-- FontAwesome -->
@@ -20,8 +20,18 @@
         <link rel="icon" type="img/png" href="{% static 'img/main_logo.webp' %}" />
     </head>
 
-    <body>
-        {% block content %} {% endblock %}
+    <body class="d-flex flex-column min-vh-100">
+        <main class="flex-fill">{% block content %}{% endblock %}</main>
+        <footer class="bg-light py-3 mt-auto border-top">
+            <div class="container d-flex justify-content-between align-items-center">
+                <!-- Left-aligned text -->
+                <p class="mb-0">&copy; 2025 SkillSharing. All rights reserved.</p>
+                <!-- Right-aligned links -->
+                <div class="text-end">
+                    <a href="{% url 'about' %}" class="link-secondary">About</a>
+                </div>
+            </div>
+        </footer>
         <!-- jQuery -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- Bootstrap Bundle JS -->

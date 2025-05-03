@@ -40,7 +40,7 @@
                         <p class="card-text mb-0"><strong>End Time:</strong> {{ skill.availability_end }}</p>
                         <p class="card-text"><strong>Created:</strong> {{ skill.created_at|timesince }} ago</p>
                         <a href="{% url 'skill_reviews' skill.id %}" class="btn btn-primary btn-sm">Reviews</a>
-                        <a href="{% url 'edit_skill_listing' skill.id %}" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="{% url 'edit_skill_listing' skill.id %}" class="btn btn-outline-web-secondary btn-sm">Edit</a>
                     </div>
                 </div>
             </div>

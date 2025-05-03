@@ -48,18 +48,18 @@
                         {% endif %}
                         <div class="mt-2">
                             <a href="{% url 'skill_reviews' skill.id %}" data-url="{% url 'skill_reviews' skill.id %}" class="btn btn-primary btn-sm">Reviews</a>
-                            <a href="{% url 'send_message' skill.id %}" data-url="{% url 'send_message' skill.id %}" class="btn btn-secondary btn-sm">Message</a>
+                            <a href="{% url 'send_message' skill.id %}" data-url="{% url 'send_message' skill.id %}" class="btn btn-primary btn-sm">Message</a>
                             {% if request.user != skill.user %}
                                 {% if skill.id in skill_requests %}
                                     {% if skill_requests|dict_get:skill.id == "pending" %}
-                                        <button class="btn btn-sm btn-warning" disabled>Pending</button>
+                                        <button class="btn btn-sm btn-outline-web-secondary" disabled>Pending</button>
                                     {% elif skill_requests|dict_get:skill.id == "approved" %}
-                                        <button class="btn btn-sm btn-success" disabled>Approved</button>
+                                        <button class="btn btn-sm btn-outline-web-secondary" disabled>Approved</button>
                                     {% elif skill_requests|dict_get:skill.id == "rejected" %}
-                                        <button class="btn btn-sm btn-danger" disabled>Rejected</button>
+                                        <button class="btn btn-sm btn-outline-web-secondary" disabled>Rejected</button>
                                     {% endif %}
                                 {% else %}
-                                    <a href="{% url 'send_skill_request' skill.id %}" class="btn btn-sm btn-info">Request Skill</a>
+                                    <a href="{% url 'send_skill_request' skill.id %}" class="btn btn-sm btn-primary">Request Skill</a>
                                 {% endif %}
                             {% endif %}
 

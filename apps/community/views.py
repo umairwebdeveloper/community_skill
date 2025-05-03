@@ -1,6 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import MessageReplyForm, SkillListingForm, RatingAndReviewForm, SkillRequestForm, UserProfileForm, MessageForm
+from .forms import (
+    MessageReplyForm,
+    SkillListingForm,
+    RatingAndReviewForm,
+    SkillRequestForm,
+    UserProfileForm,
+    MessageForm,
+)
 from django.shortcuts import get_object_or_404
 from .models import SkillListing, SkillRequest, UserProfile, Message
 from django.contrib import messages
@@ -16,7 +23,7 @@ def create_skill_listing(request):
             skill_listing = form.save(commit=False)
             skill_listing.user = request.user
             skill_listing.save()
-            return redirect("user_skill_listing_list")
+            return redirect("user_skill_listing")
     else:
         form = SkillListingForm()
     return render(request, "skills/create.html", {"form": form})
@@ -30,7 +37,7 @@ def edit_skill_listing(request, pk):
         if form.is_valid():
             form.save()
             messages.success(request, "Skill listing updated successfully!")
-            return redirect("user_skill_listing_list")
+            return redirect("user_skill_listing")
     else:
         form = SkillListingForm(instance=skill_listing)
     return render(
@@ -74,7 +81,7 @@ def skill_listing_list(request):
     )
 
 
-def user_skill_listing_list(request):
+def user_skill_listing(request):
     query = request.GET.get("q", "")  # Get the search query from the request
     skills = SkillListing.objects.filter(user=request.user).order_by("title")
 
@@ -96,7 +103,6 @@ def user_skill_listing_list(request):
     )
 
 
-@login_required(login_url="/login")
 def skill_reviews(request, pk):
     skill = get_object_or_404(SkillListing, pk=pk)
     reviews = skill.reviews.all()  # Fetch all reviews for the skill listing
@@ -152,7 +158,9 @@ def update_profile(request):
 
 @login_required(login_url="/login")
 def inbox(request):
-    messages = Message.objects.filter(receiver=request.user, parent__isnull=True).select_related("skill", "sender")
+    messages = Message.objects.filter(
+        receiver=request.user, parent__isnull=True
+    ).select_related("skill", "sender")
     paginator = Paginator(messages, 10)  # Show 9 skill listings per page
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
@@ -161,7 +169,9 @@ def inbox(request):
 
 @login_required(login_url="/login")
 def send_messages(request):
-    messages = Message.objects.filter(sender=request.user, parent__isnull=True).select_related("skill", "receiver")
+    messages = Message.objects.filter(
+        sender=request.user, parent__isnull=True
+    ).select_related("skill", "receiver")
 
     paginator = Paginator(messages, 10)  # Show 9 skill listings per page
     page_number = request.GET.get("page")
@@ -178,7 +188,9 @@ def skill_detail(request, skill_id):
 @login_required(login_url="/login")
 def send_message(request, skill_id):
     skill = get_object_or_404(SkillListing, id=skill_id)
-    messages = Message.objects.filter(skill=skill, sender=request.user).order_by("-timestamp")
+    messages = Message.objects.filter(skill=skill, sender=request.user).order_by(
+        "-timestamp"
+    )
     if request.method == "POST":
         form = MessageForm(request.POST)
         if form.is_valid():

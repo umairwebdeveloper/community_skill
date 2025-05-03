@@ -17,13 +17,13 @@
                         <strong>From:</strong> {{ req.sender.username }}<br />
                         <strong>Skill:</strong> {{ req.skill.title }}<br />
                         <strong>Message:</strong> {{ req.message|default:"No message provided." }}<br />
-                        <strong>Status:</strong> <span class="badge {% if req.status == 'pending' %}bg-warning{% elif req.status == 'approved' %}bg-success{% else %}bg-danger{% endif %}">
+                        <strong>Status:</strong> <span class="badge {% if req.status == 'pending' %}bg-web-secondary{% elif req.status == 'approved' %}bg-web-secondary{% else %}bg-web-secondary{% endif %}">
                             {{ req.get_status_display }}</span><br />
                         <small class="text-muted">Requested at: {{ req.created_at }}</small><br />
 
                         {% if req.status == "pending" %}
-                        <a href="{% url 'approve_skill_request' req.id %}" class="btn btn-sm btn-success mt-2">Approve</a>
-                        <a href="{% url 'reject_skill_request' req.id %}" class="btn btn-sm btn-danger mt-2">Reject</a>
+                        <a href="{% url 'approve_skill_request' req.id %}" class="btn btn-sm btn-primary mt-2">Approve</a>
+                        <a href="{% url 'reject_skill_request' req.id %}" class="btn btn-sm btn-outline-web-secondary mt-2">Reject</a>
                         {% endif %}
                     </li>
                     {% endfor %}

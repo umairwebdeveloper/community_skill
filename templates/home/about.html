@@ -1,53 +1,79 @@
-{% extends 'base.html' %} {% load static %} {% block content %} {% load widget_tweaks %} {% include 'partials/_navbar.html' %}
-<!-- About Us Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h1>About Us</h1>
-            <p class="lead">
-                Discover, share, and learn skills with a vibrant community of
-                passionate individuals. Whether you're here to teach or to grow,
-                SkillSharing is the place to be.
-            </p>
-        </div>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  {% include 'partials/_navbar.html' %}
 
-        <div class="row">
-            <!-- Our Mission -->
-            <div class="col-md-6 mb-4">
-                <h3>Our Mission</h3>
-                <p>
-                    At SkillSharing, our mission is to create an inclusive
-                    platform where experts and beginners can interact, share
-                    their skills, and learn from one another. We are dedicated
-                    to fostering a community where learning is accessible to
-                    everyone.
-                </p>
-            </div>
-            <!-- Our Vision -->
-            <div class="col-md-6 mb-4">
-                <h3>Our Vision</h3>
-                <p>
-                    We envision a world where continuous learning and skill
-                    sharing empower individuals to achieve their personal and
-                    professional goals. Our platform is built on the belief that
-                    education should be a shared journey of growth and
-                    discovery.
-                </p>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Our Community -->
-            <div class="col-md-12">
-                <h3>Our Community</h3>
-                <p>
-                    Join thousands of like-minded individuals who are passionate
-                    about sharing their expertise and exploring new skills. Our
-                    community thrives on collaboration, support, and the shared
-                    joy of learning something new every day.
-                </p>
-            </div>
-        </div>
+  <!-- Hero Banner -->
+  <section class="position-relative overflow-hidden" style="height: 400px;">
+    <img src="{% static 'img/about_1.jpg' %}"
+         class="w-100 h-100 object-fit-cover"
+         alt="SkillSharing Banner">
+    <div class="position-absolute top-0 start-0 w-100 h-100"
+         style="background: rgba(0, 0, 0, 0.5);"></div>
+    <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
+      <h1 class="display-4 fw-bold">About SkillSharing</h1>
+      <p class="lead">Connecting passionate learners and teachers around the world.</p>
     </div>
-</section>
+  </section>
+
+  <!-- Mission / Vision / Community -->
+  <section class="py-5">
+    <div class="container">
+
+      <!-- Our Mission -->
+      <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+          <img src="{% static 'img/about_2.jpg' %}"
+               class="img-fluid rounded shadow"
+               alt="Nossa Missão">
+        </div>
+        <div class="col-md-6">
+          <h2 class="fw-semibold">Our Mission</h2>
+          <p class="text-muted">
+            Empower every individual to both teach and learn, building an
+            inclusive community where skills—and confidence—grow together.
+            We’re dedicated to making knowledge exchange seamless and
+            rewarding for experts and beginners alike.
+          </p>
+        </div>
+      </div>
+
+      <!-- Our Vision -->
+      <div class="row align-items-center mb-5 flex-md-row-reverse">
+        <div class="col-md-6">
+          <img src="{% static 'img/about_3.jpg' %}"
+               class="img-fluid rounded shadow"
+               alt="Nossa Visão">
+        </div>
+        <div class="col-md-6">
+          <h2 class="fw-semibold">Our Vision</h2>
+          <p class="text-muted">
+            A world where continuous learning and collaboration unlock
+            human potential. We believe that by sharing expertise openly,
+            everyone elevates—personally and professionally.
+          </p>
+        </div>
+      </div>
+
+      <!-- Our Community -->
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <img src="{% static 'img/about_4.jpg' %}"
+               class="img-fluid rounded shadow"
+               alt="Nossa Comunidade">
+        </div>
+        <div class="col-md-6">
+          <h2 class="fw-semibold">Our Community</h2>
+          <p class="text-muted">
+            Join thousands of learners and instructors who support each
+            other’s growth. From one-on-one sessions to group workshops,
+            our platform thrives on collaboration, curiosity, and the
+            shared joy of discovery.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
 {% endblock %}
