@@ -12,6 +12,11 @@
                     <a class="nav-link {% if request.path == '/' %}active text-primary{% endif %}" href="/">Home</a>
                 </li>
 
+                <!-- About -->
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active text-primary{% endif %}" href="{% url 'about' %}">About</a>
+                </li>
+
                 <!-- All Skills (always visible) -->
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'skill_listing_list' %}active text-primary{% endif %}" href="{% url 'skill_listing_list' %}">All Skills</a>

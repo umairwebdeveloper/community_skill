@@ -1,44 +1,129 @@
 {% extends 'base.html' %} {% load static %} {% block content %} {% load widget_tweaks %} {% include 'partials/_navbar.html' %}
-
+<style>
+    .icon-circle {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    .transition {
+        transition: all 0.2s ease-in-out;
+    }
+    .icon-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    .f-icon-circle {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+    .transition {
+        transition: all 0.2s ease-in-out;
+    }
+    .instructor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    .testimonial-card {
+        border-radius: 0.5rem;
+    }
+    .transition {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+</style>
 <section class="hero-section text-dark py-5">
     <div class="container text-center">
         <div class="row align-items-center">
             <div class="col-md-6 text-md-start">
                 {% include 'partials/_alert.html' %}
-                <h1 class="display-4 fw-bold">Welcome to SkillSharing</h1>
-                <p class="lead">
-                    Discover, share, and learn skills with a vibrant community
-                    of passionate individuals. Whether you're here to teach or
-                    to grow, SkillSharing is the place to be.
-                </p>
+                <h1 class="display-4 fw-bold">Welcome to <span class="text-web-secondary">SkillSharing</span></h1>
+                <p class="lead">Discover, share, and learn skills with a vibrant community of passionate individuals. Whether you're here to teach or to grow, SkillSharing is the place to be.</p>
                 <div class="mt-4">
-                    <a
-                        href="{% url 'skill_listing_list' %}"
-                        class="btn btn-web-primary btn-lg me-3"
-                        >Explore Skills</a
-                    >
+                    <a href="{% url 'skill_listing_list' %}" class="btn btn-web-primary btn-lg me-3">Explore Skills</a>
                     {% if request.user.is_authenticated %}
-                    <a
-                        href="{% url 'create_skill_listing' %}"
-                        class="btn btn-outline-web-secondary btn-lg"
-                        >Create Skill</a
-                    >
+                    <a href="{% url 'create_skill_listing' %}" class="btn btn-outline-web-secondary btn-lg">Create Skill</a>
                     {% else %}
-                    <a
-                        href="{% url 'signup' %}"
-                        class="btn btn-outline-web-secondary btn-lg"
-                        >Sign Up</a
-                    >
+                    <a href="{% url 'signup' %}" class="btn btn-outline-web-secondary btn-lg">Sign Up</a>
                     {% endif %}
                 </div>
             </div>
             <div class="col-md-6">
-                <img
-                    src="{% static 'img/hero.jpg' %}"
-                    alt="Skill Sharing Illustration"
-                    class="img-fluid rounded"
-                />
+                <img src="{% static 'img/hero.jpg' %}" alt="Skill Sharing Illustration" class="img-fluid rounded" />
             </div>
+        </div>
+    </div>
+</section>
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="mb-4 text-center">Categories</h2>
+        <div class="row g-4">
+            {% for cat in top_categories %}
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="icon-card text-center p-4 shadow-sm rounded-3 transition">
+                    <div class="icon-circle bg-web-primary text-white mb-3 mx-auto">
+                        <i class="{{ cat.icon }} fa-2x"></i>
+                    </div>
+                    <h6 class="mb-0 text-dark">{{ cat.name }}</h6>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<section class="py-5">
+    <div class="container">
+        <h2 class="mb-4 text-center">What People Say</h2>
+        <div class="row g-4">
+            {% for t in testimonials %}
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm testimonial-card p-4 transition">
+                    <!-- Star rating -->
+                    <div class="mb-2 text-center">
+                        {% for i in star_range %} {% if i <= t.rating %}
+                        <i class="fas fa-star text-web-secondary"></i>
+                        {% else %}
+                        <i class="far fa-star text-web-secondary"></i>
+                        {% endif %} {% endfor %}
+                    </div>
+
+                    <!-- Quote -->
+                    <blockquote class="blockquote text-center fst-italic mb-3">“{{ t.quote }}”</blockquote>
+
+                    <!-- Author -->
+                    <div class="text-end">
+                        <footer class="blockquote-footer">{{ t.author_name }}</footer>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="mb-4 text-center">Featured Instructors</h2>
+        <div class="row g-4">
+            {% for prof in featured_instructors %}
+            <div class="col-6 col-md-4 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm instructor-card transition p-4 text-center">
+                    <div class="f-icon-circle bg-web-primary text-white mx-auto mb-3">
+                        <i class="{{ prof.icon }} fa-3x"></i>
+                    </div>
+                    <h5 class="mb-1 text-dark">{{ prof.name }}</h5>
+                    <p class="text-muted small">{{ prof.expertise }}</p>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
