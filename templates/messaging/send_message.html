@@ -1,40 +1,40 @@
-{% extends "base.html" %}
-{% block content %}
-{% include 'partials/_navbar.html' %}
+{% extends "base.html" %} {% block content %} {% include 'partials/_navbar.html' %}
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card p-3">
                 <div>
-                    <a href="{% url 'skill_listing_list' %}" class="btn btn-outline-web-secondary btn-sm mb-2" role="button" aria-pressed="true">< Back</a>
+                    <button id="backButton" class="btn btn-outline-web-secondary btn-sm mb-2">< Back</a>
                 </div>
-                <h2>Send Message About {{ skill.title }}</h2>
+                <h2>Send Message About: {{ skill.title }}</h2>
                 <form method="POST">
-                    {% csrf_token %}
-                    {{ form.non_field_errors }}
-                    <div class="mb-3">
-                        {{ form.content.label_tag }}
-                        {{ form.content }}
-                    </div>
+                    {% csrf_token %} {{ form.non_field_errors }}
+                    <div class="mb-3">{{ form.content.label_tag }} {{ form.content }}</div>
                     <button type="submit" class="btn btn-primary">Send Message</button>
                 </form>
 
-                <hr class="my-4">
+                <hr class="my-4" />
                 <h4>Your Messages Sent About This Skill</h4>
                 {% if messages.exists %}
-                    <ul class="list-group">
-                        {% for message in messages %}
-                        <li class="list-group-item">
-                            <p class="mb-0">{{ message.content }}</p>
-                            <small class="text-muted">Sent {{ message.timestamp|timesince }} ago</small>
-                        </li>
-                        {% endfor %}
-                    </ul>
+                <ul class="list-group">
+                    {% for message in messages %}
+                    <li class="list-group-item">
+                        <p class="mb-0">{{ message.content }}</p>
+                        <small class="text-muted">Sent {{ message.timestamp|timesince }} ago</small>
+                    </li>
+                    {% endfor %}
+                </ul>
                 {% else %}
-                    <p class="text-muted">No messages have been sent about this skill yet.</p>
+                <p class="text-muted">No messages have been sent about this skill yet.</p>
                 {% endif %}
             </div>
         </div>
     </div>
 </div>
+<script>
+    document.getElementById("backButton").addEventListener("click", function (event) {
+        event.preventDefault()
+        window.history.back()
+    })
+</script>
 {% endblock %}

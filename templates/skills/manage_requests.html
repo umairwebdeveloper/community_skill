@@ -1,14 +1,10 @@
-{% extends "base.html" %}
-{% block content %}
-{% include 'partials/_navbar.html' %}
+{% extends "base.html" %} {% block content %} {% include 'partials/_navbar.html' %}
 
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card p-3">
-                <div class="mb-3">
-                {% include 'partials/_alert.html' %}
-                </div>
+                <div class="mb-3">{% include 'partials/_alert.html' %}</div>
                 <h2>Manage Skill Requests</h2>
                 {% if skill_requests %}
                 <ul class="list-group mb-4">
@@ -17,10 +13,9 @@
                         <strong>From:</strong> {{ req.sender.username }}<br />
                         <strong>Skill:</strong> {{ req.skill.title }}<br />
                         <strong>Message:</strong> {{ req.message|default:"No message provided." }}<br />
-                        <strong>Status:</strong> <span class="badge {% if req.status == 'pending' %}bg-web-secondary{% elif req.status == 'approved' %}bg-web-secondary{% else %}bg-web-secondary{% endif %}">
-                            {{ req.get_status_display }}</span><br />
+                        <strong>Status:</strong> <span class="badge {% if req.status == 'pending' %}bg-web-secondary{% elif req.status == 'approved' %}bg-web-secondary{% else %}bg-web-secondary{% endif %}"> {{ req.get_status_display }}</span><br />
                         <small class="text-muted">Requested at: {{ req.created_at }}</small><br />
-
+                        <a href="{% url 'send_message' req.skill.id %}" data-url="{% url 'send_message' req.skill.id %}" class="btn btn-primary btn-sm mt-2">Message</a>
                         {% if req.status == "pending" %}
                         <a href="{% url 'approve_skill_request' req.id %}" class="btn btn-sm btn-primary mt-2">Approve</a>
                         <a href="{% url 'reject_skill_request' req.id %}" class="btn btn-sm btn-outline-web-secondary mt-2">Reject</a>

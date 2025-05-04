@@ -6,6 +6,7 @@ from .models import (
     RatingAndReview,
     Message,
     UserProfile,
+    SkillRequest,
 )
 
 admin.site.site_header = "Skill Listing Administration"
@@ -96,3 +97,8 @@ class MessageAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ("user", "phone", "location", "profile_image")
     search_fields = ("user__username", "phone", "location")
+
+
+@admin.register(SkillRequest)
+class SkillRequestAdmin(admin.ModelAdmin):
+    list_display = ("sender", "skill", "status", "created_at")
